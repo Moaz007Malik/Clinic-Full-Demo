@@ -1,5 +1,6 @@
 const TOKEN_KEY = 'atrium_token';
 const CLINIC_KEY = 'atrium_clinic';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY);
@@ -26,7 +27,7 @@ export async function api(path, { method = 'GET', body } = {}) {
   if (token) headers.Authorization = `Bearer ${token}`;
   const clinicId = getClinicId();
   if (clinicId && !path.startsWith('/api/auth/')) headers['X-Clinic-Id'] = clinicId;
-  const response = await fetch(path, {
+  const response = await fetch(`${API_URL}${path}`, {
     method,
     headers,
     body: body !== undefined ? JSON.stringify(body) : undefined
