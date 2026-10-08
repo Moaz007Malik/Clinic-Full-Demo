@@ -1,0 +1,11 @@
+{
+  "name": "linden",
+  "private": true,
+  "scripts": {
+    "dev": "npx concurrently -n api,web -c cyan,magenta \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "db:setup": "npm --prefix backend run db:setup"
+  },
+  "dependencies": {
+    "concurrently": "^10.0.6"
+  }
+}

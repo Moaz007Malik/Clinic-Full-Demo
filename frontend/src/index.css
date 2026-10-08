@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Outfit", ui-sans-serif, sans-serif;
+  --color-ink: #14241f;
+  --color-moss: #1c6b52;
+  --color-moss-deep: #10241c;
+  --color-copper: #c56a32;
+  --color-sand: #f3efe6;
+  --color-paper: #fbf8f3;
+  --color-line: #e4dccf;
+  --color-mute: #5d6b64;
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 480;
+}
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.font-display { font-family: var(--font-display); font-optical-sizing: auto; }
+
+@media print {
+  aside, header, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+  body { background: white; }
+}
