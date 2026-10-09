@@ -36,7 +36,7 @@ export default function HomePage() {
               <p className="text-xs tracking-[0.28em] text-mute">MULTI-TENANT CLINIC OS</p>
               <BlurText
                 text="The clinic, from the front desk to the chart."
-                className="font-display mt-4 max-w-xl text-5xl leading-[0.95] text-ink sm:text-6xl"
+                className="font-display mt-4 max-w-xl text-4xl leading-[0.95] text-ink sm:text-5xl lg:text-6xl"
                 delay={50}
               />
               <p className="mt-6 max-w-md text-lg text-mute">
@@ -93,7 +93,7 @@ export default function HomePage() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-6 text-sm text-mute">
           <span className="font-display text-lg text-ink">Linden</span>
-          <span>Karachi and Lahore demo clinics · password Linden#2026</span>
+          <span>Muscat demo clinics · password Linden#2026</span>
           <Link to="/start" className="text-moss">Start a 14-day clinic</Link>
         </div>
       </footer>

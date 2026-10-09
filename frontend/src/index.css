@@ -27,8 +27,25 @@ button { cursor: pointer; }
 
 .font-display { font-family: var(--font-display); font-optical-sizing: auto; }
 
+h1.font-display {
+  font-size: clamp(1.75rem, 2vw + 1.35rem, 2.75rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.nav-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(243, 239, 230, 0.45) transparent;
+}
+.nav-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.nav-scroll::-webkit-scrollbar-thumb {
+  background: rgba(243, 239, 230, 0.45);
+  border-radius: 999px;
+}
+
 @media print {
   aside, header, .no-print { display: none !important; }
+  .app-shell, main { height: auto !important; overflow: visible !important; }
   main { padding: 0 !important; }
   body { background: white; }
 }

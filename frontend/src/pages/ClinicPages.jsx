@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
+import { PlatformCharts } from '../components/Charts';
 import { api, money, when } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { Badge, Button, Empty, Field, Panel, control, statusTone } from '../components/ui';
@@ -61,7 +62,7 @@ export function ClinicalPage() {
             {['subjective', 'objective', 'assessment', 'plan', 'symptoms', 'diagnosis'].map((key) => (
               <Field key={key} label={key}><textarea className={control} rows={2} value={form[key]} onChange={(event) => setForm({ ...form, [key]: event.target.value })} /></Field>
             ))}
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {['systolic', 'diastolic', 'pulse', 'spo2'].map((key) => <input key={key} className={control} placeholder={key} value={form[key]} onChange={(event) => setForm({ ...form, [key]: event.target.value })} />)}
             </div>
             <Button type="submit">Save encounter</Button>
@@ -162,7 +163,7 @@ export function LabPage() {
               <input className={`${control} mt-1`} value={item.resultValue || ''} onChange={(event) => setResults(results.map((row, rowIndex) => rowIndex === index ? { ...row, resultValue: event.target.value } : row))} />
             </label>
           ))}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button onClick={() => saveResults(false)}>Save</Button>
             <Button tone="copper" onClick={() => saveResults(true)}>Approve</Button>
           </div>
@@ -209,12 +210,12 @@ export function ImagingPage() {
       )}
       {orders.data?.orders?.map((item) => (
         <article key={item.id} className="rounded-3xl border border-line bg-white p-4">
-          <div className="flex justify-between"><span>{item.modality.toUpperCase()} · {item.study_name} · {item.first_name} {item.last_name}</span><Badge tone={statusTone(item.status)}>{item.status}</Badge></div>
+          <div className="flex flex-wrap items-center justify-between gap-2"><span>{item.modality.toUpperCase()} · {item.study_name} · {item.first_name} {item.last_name}</span><Badge tone={statusTone(item.status)}>{item.status}</Badge></div>
           <p className="mt-2 text-sm">{item.report || item.clinical_info}</p>
           {can('imaging.write') && item.status !== 'approved' && (
-            <div className="mt-2 flex gap-2">
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
               <input className={control} placeholder="Radiologist report" value={report[item.id] || ''} onChange={(event) => setReport({ ...report, [item.id]: event.target.value })} />
-              <Button onClick={() => save(item.id)}>Approve</Button>
+              <Button className="shrink-0" onClick={() => save(item.id)}>Approve</Button>
             </div>
           )}
         </article>
@@ -253,7 +254,7 @@ export function PharmacyPage() {
           </select>
         </Field>
         {lines.map((line, index) => (
-          <div key={index} className="mt-2 grid grid-cols-[1fr_120px] gap-2">
+          <div key={index} className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_120px]">
             <select className={control} value={line.medicineId} onChange={(event) => setLines(lines.map((row, rowIndex) => rowIndex === index ? { ...row, medicineId: event.target.value } : row))}>
               <option value="">Medicine</option>
               {meds.data?.medicines?.map((medicine) => <option key={medicine.id} value={medicine.id}>{medicine.name} · {medicine.on_hand} in stock</option>)}
@@ -267,7 +268,7 @@ export function PharmacyPage() {
       <div className="grid gap-3 md:grid-cols-2">
         {meds.data?.medicines?.map((medicine) => (
           <div key={medicine.id} className="rounded-3xl border border-line bg-white p-4">
-            <div className="flex justify-between"><strong>{medicine.name}</strong><Badge tone={medicine.on_hand <= medicine.reorder_level ? 'red' : 'moss'}>{medicine.on_hand} {medicine.unit}</Badge></div>
+            <div className="flex flex-wrap items-center justify-between gap-2"><strong>{medicine.name}</strong><Badge tone={medicine.on_hand <= medicine.reorder_level ? 'red' : 'moss'}>{medicine.on_hand} {medicine.unit}</Badge></div>
             <div className="text-sm text-mute">{medicine.generic_name} · {medicine.strength} · {money(medicine.sell_price)}</div>
           </div>
         ))}
@@ -284,7 +285,7 @@ export function BillingPage() {
   const { can } = useAuth();
   const invoices = useLoader('/api/invoices');
   const patients = useLoader('/api/patients');
-  const [form, setForm] = useState({ patientId: '', category: 'consultation', description: 'Consultation', unitPrice: 3500 });
+  const [form, setForm] = useState({ patientId: '', category: 'consultation', description: 'Consultation', unitPrice: 35 });
   const [pay, setPay] = useState({});
 
   async function create(event) {
@@ -321,9 +322,9 @@ export function BillingPage() {
           <div className="text-sm text-mute">{invoice.first_name} {invoice.last_name} · {invoice.category} · {invoice.payer_type}</div>
           <div className="mt-1">{money(invoice.total)} · balance {money(invoice.balance)}</div>
           {can('billing.write') && invoice.balance > 0 && (
-            <div className="mt-2 flex gap-2">
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
               <input className={control} placeholder="Amount" value={pay[invoice.id] || ''} onChange={(event) => setPay({ ...pay, [invoice.id]: event.target.value })} />
-              <Button onClick={() => takePayment(invoice.id)}>Take cash</Button>
+              <Button className="shrink-0" onClick={() => takePayment(invoice.id)}>Take cash</Button>
             </div>
           )}
         </article>
@@ -348,7 +349,7 @@ export function InsurancePage() {
   return (
     <div className="space-y-4">
       <h1 className="font-display text-4xl">Insurance</h1>
-      <form className="flex gap-2" onSubmit={add}>
+      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={add}>
         <input className={control} placeholder="New insurer" value={name} onChange={(event) => setName(event.target.value)} />
         <Button type="submit">Add</Button>
       </form>
@@ -359,7 +360,7 @@ export function InsurancePage() {
         <article key={claim.id} className="rounded-3xl border border-line bg-white p-4">
           <div className="flex justify-between"><span>{claim.first_name} {claim.last_name} · {money(claim.amount)}</span><Badge tone={statusTone(claim.status)}>{claim.status}</Badge></div>
           <p className="text-sm text-mute">{claim.notes}</p>
-          <div className="mt-2 flex gap-2">{['submitted', 'approved', 'rejected', 'paid'].map((status) => <button key={status} className="rounded-full bg-sand px-3 py-1 text-xs" type="button" onClick={() => setStatus(claim.id, status)}>{status}</button>)}</div>
+          <div className="mt-2 flex flex-wrap gap-2">{['submitted', 'approved', 'rejected', 'paid'].map((status) => <button key={status} className="rounded-full bg-sand px-3 py-1 text-xs" type="button" onClick={() => setStatus(claim.id, status)}>{status}</button>)}</div>
         </article>
       ))}
     </div>
@@ -453,7 +454,7 @@ export function TelemedPage() {
           <iframe title="Video room" className="min-h-[420px] w-full rounded-3xl bg-ink" src={room.appointment.room_url} allow="camera; microphone; fullscreen" />
           <div className="rounded-3xl border border-line bg-white p-4">
             {room.messages.map((message) => <p key={message.id} className="mb-2 text-sm"><strong>{message.sender_name}: </strong>{message.body}</p>)}
-            <form className="mt-3 flex gap-2" onSubmit={send}>
+            <form className="mt-3 flex flex-col gap-2 sm:flex-row" onSubmit={send}>
               <input className={control} value={text} onChange={(event) => setText(event.target.value)} placeholder="Message the room" />
               <Button type="submit">Send</Button>
             </form>
@@ -522,8 +523,8 @@ export function PeoplePage() {
         <Button type="submit">Invite</Button>
       </form>
       {message && <p className="text-sm">{message}</p>}
-      <div className="overflow-hidden rounded-3xl border border-line bg-white">
-        <table className="w-full text-left text-sm">
+      <div className="overflow-x-auto rounded-3xl border border-line bg-white">
+        <table className="w-full min-w-[40rem] text-left text-sm">
           <tbody>
             {data.data?.users?.map((user) => (
               <tr key={user.id} className="border-t border-line">
@@ -536,7 +537,7 @@ export function PeoplePage() {
           </tbody>
         </table>
       </div>
-      <form className="flex gap-2" onSubmit={createRole}>
+      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={createRole}>
         <input className={control} placeholder="Custom role name" value={roleName} onChange={(event) => setRoleName(event.target.value)} />
         <Button type="submit">Create role</Button>
       </form>
@@ -555,7 +556,7 @@ export function FacilitiesPage() {
   return (
     <div className="space-y-4">
       <h1 className="font-display text-4xl">Facilities</h1>
-      <form className="flex gap-2" onSubmit={add}>
+      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={add}>
         <input className={control} placeholder="New branch" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
         <input className={control} placeholder="Code" value={form.code} onChange={(event) => setForm({ ...form, code: event.target.value })} />
         <Button type="submit">Add branch</Button>
@@ -698,12 +699,13 @@ export function PlatformPage() {
   return (
     <div className="space-y-5">
       <h1 className="font-display text-4xl">Tenants</h1>
-      <div className="grid gap-3 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label="Tenants" value={overview.tenants.length} />
         <Stat label="Users" value={overview.totalUsers} />
         <Stat label="Patients" value={overview.totalPatients} />
         <Stat label="API events today" value={overview.apiCallsToday} />
       </div>
+      <PlatformCharts overview={overview} />
       <p className="text-sm text-mute">Database {overview.health.version} · storage {(overview.storageBytes / 1024 / 1024).toFixed(1)} MB · subscription cash {money(overview.subscriptionRevenue)}</p>
       {overview.tenants.map((tenant) => (
         <article key={tenant.id} className="flex flex-wrap items-center justify-between gap-3 rounded-3xl bg-white p-4">
@@ -711,7 +713,7 @@ export function PlatformPage() {
             <div className="font-display text-2xl">{tenant.name}</div>
             <div className="text-sm text-mute">{tenant.slug} · {tenant.plan_name} · {tenant.clinics} branches · {tenant.patients} patients</div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Badge tone={statusTone(tenant.status)}>{tenant.status}</Badge>
             <Button tone="ghost" onClick={async () => { await api(`/api/platform/tenants/${tenant.id}`, { method: 'PATCH', body: { status: tenant.status === 'suspended' ? 'active' : 'suspended' } }); data.reload(); }}>{tenant.status === 'suspended' ? 'Activate' : 'Suspend'}</Button>
           </div>

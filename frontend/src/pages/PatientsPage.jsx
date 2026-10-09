@@ -46,8 +46,8 @@ export default function PatientsPage() {
       <input className={`${control} mb-4 max-w-md`} placeholder="Search the registry" value={query} onChange={(event) => setQuery(event.target.value)} />
       {error && <p className="mb-3 text-sm text-red-800">{error}</p>}
       {!patients.length ? <Empty>No patients match.</Empty> : (
-        <div className="overflow-hidden rounded-3xl border border-line bg-white">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-3xl border border-line bg-white">
+          <table className="w-full min-w-[40rem] text-left text-sm">
             <thead className="bg-sand text-mute">
               <tr><th className="px-4 py-3">Patient</th><th>MRN</th><th>Phone</th><th>City</th><th></th></tr>
             </thead>

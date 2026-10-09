@@ -16,7 +16,7 @@ export default function OnboardingPage() {
     organizationName: '',
     slug: '',
     city: '',
-    country: 'Pakistan',
+    country: 'Oman',
     phone: '',
     primaryColor: '#1c6b52',
     accentColor: '#c56a32',
@@ -51,7 +51,7 @@ export default function OnboardingPage() {
   return (
     <div className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-6 py-12">
       <Link className="text-sm text-mute" to="/">Back to sign in</Link>
-      <h1 className="font-display mt-4 text-5xl">Open a clinic group.</h1>
+      <h1 className="font-display mt-4 text-4xl sm:text-5xl">Open a clinic group.</h1>
       <p className="mt-3 max-w-xl text-mute">Fourteen days on the Starter plan. Your clinic code becomes the sign-in tenant, for example <span className="text-ink">northwind</span>.</p>
       <div className="mt-8 flex gap-2">
         {STEPS.map((label, index) => (

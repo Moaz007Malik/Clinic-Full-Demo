@@ -36,7 +36,7 @@ export default function AppointmentsPage() {
     try {
       await api('/api/appointments', {
         method: 'POST',
-        body: { ...form, clinicId, startsAt: new Date(`${form.startsAt}:00+05:00`).toISOString(), repeatEvery: 'week' }
+        body: { ...form, clinicId, startsAt: new Date(`${form.startsAt}:00+04:00`).toISOString(), repeatEvery: 'week' }
       });
       setOpen(false);
       load();
@@ -57,7 +57,7 @@ export default function AppointmentsPage() {
           <h1 className="font-display text-4xl">Appointments</h1>
           <p className="text-mute">Book, check in, and run the token queue.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <input className={control} type="date" value={date} onChange={(event) => setDate(event.target.value)} />
           {can('appointments.write') && <Button onClick={() => setOpen(true)}>Book</Button>}
         </div>
@@ -118,7 +118,7 @@ export default function AppointmentsPage() {
                 {doctors.map((doctor) => <option key={doctor.id} value={doctor.id}>{doctor.full_name}</option>)}
               </select>
             </Field>
-            <Field label="Starts (Karachi time)"><input className={control} type="datetime-local" required value={form.startsAt} onChange={(event) => setForm({ ...form, startsAt: event.target.value })} /></Field>
+            <Field label="Starts (Muscat time)"><input className={control} type="datetime-local" required value={form.startsAt} onChange={(event) => setForm({ ...form, startsAt: event.target.value })} /></Field>
             <Field label="Type">
               <select className={control} value={form.visitType} onChange={(event) => setForm({ ...form, visitType: event.target.value })}>
                 <option value="in_person">In person</option>

@@ -43,13 +43,13 @@ export async function api(path, { method = 'GET', body } = {}) {
 }
 
 export function money(value) {
-  return new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(Number(value || 0));
+  return new Intl.NumberFormat('en-OM', { style: 'currency', currency: 'OMR' }).format(Number(value || 0));
 }
 
 export function when(value) {
   if (!value) return '—';
-  return new Intl.DateTimeFormat('en-PK', {
-    timeZone: 'Asia/Karachi',
+  return new Intl.DateTimeFormat('en-OM', {
+    timeZone: 'Asia/Muscat',
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
@@ -59,7 +59,7 @@ export function when(value) {
 
 export function dayStamp(offset = 0) {
   const date = new Date(Date.now() + offset * 86400000);
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Karachi', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Muscat', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
 }
 
 export function fullName(person) {
