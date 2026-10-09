@@ -1,5 +1,6 @@
 const TOKEN_KEY = 'atrium_token';
 const CLINIC_KEY = 'atrium_clinic';
+const ORG_KEY = 'atrium_org';
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 export function getToken() {
@@ -20,6 +21,15 @@ export function setClinicId(id) {
   else localStorage.removeItem(CLINIC_KEY);
 }
 
+export function getOrganizationId() {
+  return localStorage.getItem(ORG_KEY) || '';
+}
+
+export function setOrganizationId(id) {
+  if (id) localStorage.setItem(ORG_KEY, id);
+  else localStorage.removeItem(ORG_KEY);
+}
+
 export async function api(path, { method = 'GET', body } = {}) {
   const headers = {};
   if (body !== undefined) headers['Content-Type'] = 'application/json';
@@ -27,6 +37,10 @@ export async function api(path, { method = 'GET', body } = {}) {
   if (token) headers.Authorization = `Bearer ${token}`;
   const clinicId = getClinicId();
   if (clinicId && !path.startsWith('/api/auth/')) headers['X-Clinic-Id'] = clinicId;
+  const organizationId = getOrganizationId();
+  if (organizationId && !path.startsWith('/api/auth/login') && !path.startsWith('/api/auth/onboard')) {
+    headers['X-Organization-Id'] = organizationId;
+  }
   const response = await fetch(`${API_URL}${path}`, {
     method,
     headers,

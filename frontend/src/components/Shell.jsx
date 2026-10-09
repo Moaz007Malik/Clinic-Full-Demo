@@ -26,7 +26,7 @@ const NAV = [
 ];
 
 export default function Shell() {
-  const { session, signOut, clinicId, chooseClinic, can } = useAuth();
+  const { session, signOut, clinicId, chooseClinic, organizationId, tenants, chooseOrganization, can } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function Shell() {
         <div className="flex items-start justify-between gap-3 px-5 py-6">
           <div className="min-w-0">
             <div className="text-xs tracking-[0.22em] text-sand/60">LINDEN</div>
-            <div className="font-display truncate text-2xl text-white">{session.organization?.name || 'Platform'}</div>
+            <div className="font-display truncate text-2xl text-white">{session.organization?.name || (user.isSuper ? 'Platform' : 'Linden')}</div>
           </div>
           <button type="button" className="rounded-full px-2 py-1 text-sm text-sand/80 lg:hidden" onClick={() => setMenuOpen(false)}>Close</button>
         </div>
@@ -87,6 +87,11 @@ export default function Shell() {
           </button>
           <div className="min-w-0 flex-1 truncate text-sm text-mute">{session.organization ? `${session.organization.city || ''} · ${session.organization.slug}` : 'Every clinic, one ledger'}</div>
           <div className="flex shrink-0 items-center gap-2">
+            {user.isSuper && (
+              <select className="max-w-32 truncate rounded-full border border-line bg-white px-2 py-2 text-sm sm:max-w-xs sm:px-3" aria-label="Organization" value={organizationId} onChange={(event) => chooseOrganization(event.target.value)}>
+                {tenants.map((tenant) => <option key={tenant.id} value={tenant.id}>{tenant.name}</option>)}
+              </select>
+            )}
             {session.clinics?.length > 1 && (
               <select className="max-w-28 truncate rounded-full border border-line bg-white px-2 py-2 text-sm sm:max-w-xs sm:px-3" value={clinicId} onChange={(event) => chooseClinic(event.target.value)}>
                 {session.clinics.map((clinic) => <option key={clinic.id} value={clinic.id}>{clinic.name}</option>)}

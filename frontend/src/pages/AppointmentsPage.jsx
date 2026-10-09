@@ -6,7 +6,7 @@ import { Badge, Button, Field, Modal, control, statusTone } from '../components/
 
 export default function AppointmentsPage() {
   const { clinicId } = useOutletContext();
-  const { can } = useAuth();
+  const { can, organizationId } = useAuth();
   const [date, setDate] = useState(dayStamp());
   const [rows, setRows] = useState([]);
   const [queue, setQueue] = useState([]);
@@ -23,12 +23,12 @@ export default function AppointmentsPage() {
     api('/api/appointments/waiting-list').then((data) => setWaiting(data.waiting)).catch(() => {});
   }
 
-  useEffect(() => { load(); }, [date, clinicId]);
+  useEffect(() => { load(); }, [date, clinicId, organizationId]);
   useEffect(() => {
     if (!can('patients.read')) return;
     api('/api/patients').then((data) => setPatients(data.patients)).catch(() => {});
     api('/api/staff').then((data) => setDoctors(data.staff.filter((person) => person.role_key === 'doctor'))).catch(() => {});
-  }, [clinicId]);
+  }, [clinicId, organizationId]);
 
   async function book(event) {
     event.preventDefault();

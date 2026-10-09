@@ -6,7 +6,7 @@ import { useAuth } from '../lib/auth';
 import { Badge, Button, Empty, Field, Panel, control, statusTone } from '../components/ui';
 
 function useLoader(path) {
-  const { clinicId } = useAuth();
+  const { clinicId, organizationId } = useAuth();
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
   const [tick, setTick] = useState(0);
@@ -14,7 +14,7 @@ function useLoader(path) {
     let active = true;
     api(path).then((next) => { if (active) setData(next); }).catch((err) => { if (active) setError(err.message); });
     return () => { active = false; };
-  }, [path, clinicId, tick]);
+  }, [path, clinicId, organizationId, tick]);
   return { data, error, reload: () => setTick((value) => value + 1) };
 }
 

@@ -6,7 +6,7 @@ import { Button, Empty, Field, Modal, control } from '../components/ui';
 
 export default function PatientsPage() {
   const { clinicId } = useOutletContext();
-  const { can, session } = useAuth();
+  const { can, session, organizationId } = useAuth();
   const [query, setQuery] = useState('');
   const [patients, setPatients] = useState([]);
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function PatientsPage() {
     api(`/api/patients?${params}`).then((data) => setPatients(data.patients)).catch((err) => setError(err.message));
   }
 
-  useEffect(() => { load(); }, [clinicId, query]);
+  useEffect(() => { load(); }, [clinicId, query, organizationId]);
 
   async function create(event) {
     event.preventDefault();
